@@ -19,20 +19,14 @@ tf_environment="-var 'environment=$1' ${tf_state_file}"
   echo "Error: unknown environment specified '$1', please use dev, stg, or prd" &&
   exit
 
-# If we have more than 2 arguments, we're probably running a state command so can't use -var at all
+# This path works for commands like destory, plan and apply
+cmd="terraform $2 ${tf_credential_string} ${tf_environment}"
+
+
+# if we're running a state command we can't use -var or terraform crashes hard
 [ "$2" == "state" ] &&
-  cmd="terraform $2 $3 ${tf_state_file} ${@:4}" &&
-  echo ${cmd} &&
-  eval "${cmd} || true" &&
-  exit
+  cmd="terraform $2 $3 ${tf_state_file} ${@:4}"
 
 
-[ "$#" == "2" ] &&
-  cmd="terraform $2 ${tf_credential_string} ${tf_environment}"
-
-
-echo "${cmd}"
-
-
-exit
+#echo "${cmd}"
 eval "${cmd}"
