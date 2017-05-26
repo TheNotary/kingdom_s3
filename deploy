@@ -4,20 +4,35 @@ set -e
 # Construct a string that can be passed to terraform to allow
 # our aws credentials to be used
 tf_credential_string="-var 'access_key=${HOBBY_AWS_ACCESS_KEY_ID}' -var 'secret_key=${HOBBY_AWS_SECRET_ACCESS_KEY}'"
-tf_environment="-var 'environment=$2'"
+#tf_environment="-var 'environment=$1'"
+tf_state_file="-state=terraform_$1.tfstate"
+tf_environment="-var 'environment=$1' ${tf_state_file}"
 
 # Validate number of args
-[ "$#" != "2" ] &&
-  echo "Error:  Requires 2 arguments" &&
-  echo "Usage:  $ deploy [plan|apply|destroy] [dev|stg|prd]" &&
+[ "$#" -lt "2" ] &&
+  echo "Error:  Requires at least 2 arguments" &&
+  echo "Usage:  $ deploy <dev|stg|prd> <plan|apply|destroy> [additional command for terraform]" &&
   exit
 
 # Validate target environment (dev, stg, or prd)
-( [ "$2" != "dev" ] && [ "$2" != "stg" ] && [ "$2" != "prd" ] ) &&
-  echo "Error: unknown environment specified '$2', please use dev, stg, or prd" &&
+( [ "$1" != "dev" ] && [ "$1" != "stg" ] && [ "$1" != "prd" ] ) &&
+  echo "Error: unknown environment specified '$1', please use dev, stg, or prd" &&
   exit
 
-cmd="terraform $1 ${tf_credential_string} ${tf_environment}"
+# If we have more than 2 arguments, we're probably running a state command so can't use -var at all
+[ "$2" == "state" ] &&
+  cmd="terraform $2 $3 ${tf_state_file} ${@:4}" &&
+  echo ${cmd} &&
+  eval "${cmd} || true" &&
+  exit
 
-#echo "${cmd}"
+
+[ "$#" == "2" ] &&
+  cmd="terraform $2 ${tf_credential_string} ${tf_environment}"
+
+
+echo "${cmd}"
+
+
+exit
 eval "${cmd}"

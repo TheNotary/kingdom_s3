@@ -3,9 +3,11 @@
 This repo is used for pushing assets into S3.  Bucket creation and uploading will be conducted via terraform from this repo, and downloading will be conducted in seperate apps via awscli or some other in-language means.
 
 
-###### Setup
+###### Usage
 ```
-$ sudo apt-get install awscli
+$ ./deploy dev plan
+$ ./deploy dev apply
+$ ./deploy dev state show aws_s3_bucket.secret
 ```
 
 ### Buckets
