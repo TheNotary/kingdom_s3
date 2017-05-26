@@ -4,6 +4,9 @@ This repo is used for pushing assets into S3.  Bucket creation and uploading wil
 
 
 ###### Usage
+
+First ensure the env variables `HOBBY_AWS_ACCESS_KEY_ID` and `HOBBY_AWS_SECRET_ACCESS_KEY` are properly set.  Then see example usages below.
+
 ```
 $ ./deploy dev plan
 $ ./deploy dev apply
