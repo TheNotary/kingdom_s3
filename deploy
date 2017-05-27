@@ -5,7 +5,7 @@ set -e
 # our aws credentials to be used
 tf_credential_string="-var 'access_key=${HOBBY_AWS_ACCESS_KEY_ID}' -var 'secret_key=${HOBBY_AWS_SECRET_ACCESS_KEY}'"
 #tf_environment="-var 'environment=$1'"
-tf_state_file="-state=terraform_$1.tfstate"
+tf_state_file="-state=.tf_state/terraform_$1.tfstate"
 tf_environment="-var 'environment=$1' ${tf_state_file}"
 
 # Validate number of args
@@ -20,7 +20,7 @@ tf_environment="-var 'environment=$1' ${tf_state_file}"
   exit
 
 # This path works for most commands like destory, plan and apply
-cmd="terraform $2 ${tf_credential_string} ${tf_environment}"
+cmd="terraform $2 ${tf_credential_string} ${tf_environment} ${@:3}"
 
 
 # if we're running a state command we can't use -var or terraform crashes hard
@@ -28,8 +28,10 @@ cmd="terraform $2 ${tf_credential_string} ${tf_environment}"
   cmd="terraform $2 $3 ${tf_state_file} ${@:4}"
 
 
-#echo "${cmd}"
+# echo "${cmd}"
 eval "${cmd}"
+
+
 
 
 
