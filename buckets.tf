@@ -2,6 +2,7 @@ variable "region" { default = "us-west-1" }
 variable "access_key" {}
 variable "secret_key" {}
 variable "environment" {}
+data "aws_canonical_user_id" "current" {}
 
 
 provider "aws" "prod" {
@@ -40,7 +41,7 @@ resource "aws_iam_user_policy" "secret_reader_ro" {
         "s3:ListBucket"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.secrets.arn}"
+      "Resource": "${aws_s3_bucket.secrets.arn}/*"
     }
   ]
 }
