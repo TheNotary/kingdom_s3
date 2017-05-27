@@ -38,16 +38,20 @@ resource "aws_iam_user_policy" "secret_reader_ro" {
     {
       "Action": [
         "s3:GetObject",
+        "s3:Get*",
+        "s3:ListAllMyBuckets",
         "s3:ListBucket"
       ],
       "Effect": "Allow",
-      "Resource": "${aws_s3_bucket.secrets.arn}/*"
+      "Resource": [
+        "${aws_s3_bucket.secrets.arn}",
+        "${aws_s3_bucket.secrets.arn}/*"
+      ]
     }
   ]
 }
 EOF
 }
-
 
 
 
@@ -88,6 +92,8 @@ resource "aws_s3_bucket" "secrets" {
     Name        = "secrets"
     Environment = "${var.environment}"
   }
+
+  force_destroy = true # enables terraform deleting non-empty buckets
 }
 
 
