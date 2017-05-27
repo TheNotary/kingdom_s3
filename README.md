@@ -2,15 +2,28 @@
 
 This repo is used for pushing assets into S3.  Bucket creation and uploading will be conducted via terraform from this repo, and downloading will be conducted in seperate apps via awscli or some other in-language means.
 
-
 ###### Usage
 
-First ensure the env variables `HOBBY_AWS_ACCESS_KEY_ID` and `HOBBY_AWS_SECRET_ACCESS_KEY` are properly set.  Then see example usages below.
+First ensure the env variables `HOBBY_AWS_ACCESS_KEY_ID` and `HOBBY_AWS_SECRET_ACCESS_KEY` are properly set.  You'll also need to install the awscli tool, so run a command such as `sudo apt-get install awscli`.  Then see example usages below.
+
+###### Bucket Making
 
 ```
 $ ./deploy dev plan
 $ ./deploy dev apply
 $ ./deploy dev state show aws_s3_bucket.secret
+```
+
+###### Uploading a Folder
+
+```
+$ aws s3 sync secrets/ s3://secrets-dev/secrets
+```
+
+###### Downloading a Folder
+
+```
+$ aws s3 cp s3://secrets-dev/secrets /tmp/secrets
 ```
 
 ### Buckets

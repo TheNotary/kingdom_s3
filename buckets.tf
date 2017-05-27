@@ -11,7 +11,6 @@ provider "aws" "prod" {
 }
 
 
-
 resource "aws_s3_bucket" "secrets" {
   bucket = "secrets-${var.environment}"
   acl    = "private"
@@ -21,6 +20,15 @@ resource "aws_s3_bucket" "secrets" {
     Environment = "${var.environment}"
   }
 }
+
+
+# This instruction would only upload a single file, which probably wouldn't be very helpful
+#resource "aws_s3_bucket_object" "object" {
+#  bucket = "secrets-${var.environment}"
+#  key    = "secrets.txt"
+#  source = "secrets/my_secret.txt"
+#  etag   = "${md5(file("secrets/my_secret.txt"))}"
+#}
 
 
 
