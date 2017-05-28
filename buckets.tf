@@ -2,7 +2,6 @@ variable "region" { default = "us-west-1" }
 variable "access_key" {}
 variable "secret_key" {}
 variable "environment" {}
-data "aws_canonical_user_id" "current" {}
 
 
 provider "aws" "prod" {
