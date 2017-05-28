@@ -18,7 +18,7 @@ provider "aws" "prod" {
 # Setup a user that's allowed read access to the bucket
 
 resource "aws_iam_user" "secret_reader" {
-  name = "secret_reader"
+  name = "secret_reader_${var.environment}"
   path = "/system/"
 }
 
@@ -54,34 +54,6 @@ EOF
 }
 
 
-
-
-
-
-
-
-#resource "aws_iam_role" "replication" {
-#  name = "tf-iam-role-replication-12345"
-#
-#  assume_role_policy = <<POLICY
-#  {
-#    "Version": "2012-10-17",
-#    "Statement": [
-#      {
-#        "Action": "sts:AssumeRole",
-#        "Principal": {
-#          "Service": "s3.amazonaws.com"
-#        },
-#        "Effect": "Allow",
-#        "Sid": ""
-#      }
-#    ]
-#  }
-#  POLICY
-#}
-
-
-
 # make it so only the serious terraform account can upload to this bucket
 # but make all other iam users able to download?
 resource "aws_s3_bucket" "secrets" {
@@ -89,7 +61,7 @@ resource "aws_s3_bucket" "secrets" {
   acl    = "private"
 
   tags {
-    Name        = "secrets"
+    Name        = "kingdom_s3"
     Environment = "${var.environment}"
   }
 
@@ -105,7 +77,3 @@ resource "aws_s3_bucket" "secrets" {
 #  source = "secrets/my_secret.txt"
 #  etag   = "${md5(file("secrets/my_secret.txt"))}"
 #}
-
-
-
-
