@@ -26,6 +26,9 @@ $ aws s3 sync secrets/ s3://secrets-dev/secrets
 $ aws s3 cp s3://secrets-dev/secrets /tmp/secrets
 ```
 
+Or use the example demo included in this repo to test downloading from S3.
+
+
 ### Buckets
 
 ###### Secrets
